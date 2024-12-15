@@ -7,11 +7,11 @@ export type BudgetState = {
   budget: number;
 };
 
-export const initialSatet: BudgetState = {
+export const initialState: BudgetState = {
   budget: 0,
 };
 
-export const BudgetReducer = (state: BudgetState, action: BudgetActions) => {
+export const budgetReducer = (state: BudgetState, action: BudgetActions) => {
   if (action.type === "add-budget") {
     return {
       ...state,
