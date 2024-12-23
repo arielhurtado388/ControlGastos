@@ -17,7 +17,9 @@ export default function ExpenseForm() {
 
   const [error, setError] = useState("");
 
-  const { dispatch, state } = useBudget();
+  const [previousAmount, setPreviousAmount] = useState(0);
+
+  const { dispatch, state, remainingBudget } = useBudget();
 
   useEffect(() => {
     if (state.editingId) {
@@ -25,6 +27,7 @@ export default function ExpenseForm() {
         (currentExpense) => currentExpense.id === state.editingId
       )[0];
       setExpense(editingExpense);
+      setPreviousAmount(editingExpense.amount);
     }
   }, [state.editingId]);
 
@@ -53,6 +56,14 @@ export default function ExpenseForm() {
       setError("Todos los campos son obligatorios");
       return;
     }
+
+    // Validar que no me pase el presupuesto
+
+    if (expense.amount - previousAmount > remainingBudget) {
+      setError("Prespuesto rebasado");
+      return;
+    }
+
     // Agregar o actualizar el gasto
 
     if (state.editingId) {
@@ -71,6 +82,7 @@ export default function ExpenseForm() {
       category: "",
       date: new Date(),
     });
+    setPreviousAmount(0);
   };
 
   return (
